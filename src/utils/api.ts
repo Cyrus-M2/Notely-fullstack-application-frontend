@@ -3,17 +3,10 @@ import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
 const api = axios.create({
-  // baseURL: import.meta.env.VITE_API_URL || '/api',
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 10000,
+  withCredentials: false,
 });
-
-// const api = axios.create({
-//   baseURL: process.env.NODE_ENV === 'production' 
-//     ? 'https://notely-fullstack-application-backend.onrender.com'
-//     : '/api',
-//   timeout: 10000,
-// });
 
 // Request interceptor
 api.interceptors.request.use(
@@ -33,9 +26,11 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
   (response) => {
+    console.log('API Response:', response.config.url, response.status);
     return response;
   },
   (error) => {
+    console.log('API Error:', error.config?.url, error.response?.status, error.response?.data);
     if (error.response) {
       // Server responded with error status
       const message = error.response.data?.message || 'An error occurred';

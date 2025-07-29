@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
 import { BookOpen, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import CaptchaComponent from '../components/CaptchaComponent';
 
 interface RegisterFormData {
   firstName: string;
@@ -12,6 +13,8 @@ interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  captchaId: string;
+  captchaText: string;
 }
 
 const RegisterPage: React.FC = () => {
@@ -20,18 +23,36 @@ const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaId, setCaptchaId] = useState('');
+  const [captchaText, setCaptchaText] = useState('');
+  const [captchaError, setCaptchaError] = useState('');
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<RegisterFormData>();
 
   const password = watch('password');
 
+  const handleCaptchaChange = (id: string, text: string) => {
+    setCaptchaId(id);
+    setCaptchaText(text);
+    setCaptchaError('');
+    setValue('captchaId', id);
+    setValue('captchaText', text);
+  };
+
   const onSubmit = async (data: RegisterFormData) => {
+    if (!captchaText.trim()) {
+      setCaptchaError('Please enter the captcha text');
+      return;
+    }
+
     setIsLoading(true);
+    setCaptchaError('');
     try {
       await registerUser({
         firstName: data.firstName,
@@ -39,9 +60,14 @@ const RegisterPage: React.FC = () => {
         username: data.username,
         email: data.email,
         password: data.password,
+        captchaId,
+        captchaText,
       });
       navigate('/login');
     } catch (error: any) {
+      if (error.message.includes('captcha')) {
+        setCaptchaError(error.message);
+      }
       toast.error(error.message);
     } finally {
       setIsLoading(false);
@@ -84,7 +110,7 @@ const RegisterPage: React.FC = () => {
                   })}
                   type="text"
                   className="input-field"
-                  placeholder="Joseph"
+                  placeholder="John"
                 />
                 {errors.firstName && (
                   <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
@@ -105,7 +131,7 @@ const RegisterPage: React.FC = () => {
                   })}
                   type="text"
                   className="input-field"
-                  placeholder="Joany"
+                  placeholder="Doe"
                 />
                 {errors.lastName && (
                   <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
@@ -131,7 +157,7 @@ const RegisterPage: React.FC = () => {
                 })}
                 type="text"
                 className="input-field"
-                placeholder="Joany"
+                placeholder="johndoe"
               />
               {errors.username && (
                 <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
@@ -152,7 +178,7 @@ const RegisterPage: React.FC = () => {
                 })}
                 type="email"
                 className="input-field"
-                placeholder="example@gmail.com"
+                placeholder="john@example.com"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -224,6 +250,11 @@ const RegisterPage: React.FC = () => {
                 <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
               )}
             </div>
+
+            <CaptchaComponent
+              onCaptchaChange={handleCaptchaChange}
+              error={captchaError}
+            />
 
             <button
               type="submit"

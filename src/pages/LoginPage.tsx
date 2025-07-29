@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
 import { BookOpen, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import CaptchaComponent from '../components/CaptchaComponent';
 
 interface LoginFormData {
   emailOrUsername: string;
   password: string;
+  captchaId: string;
+  captchaText: string;
 }
 
 const LoginPage: React.FC = () => {
@@ -15,19 +18,44 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaId, setCaptchaId] = useState('');
+  const [captchaText, setCaptchaText] = useState('');
+  const [captchaError, setCaptchaError] = useState('');
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<LoginFormData>();
 
+  const handleCaptchaChange = (id: string, text: string) => {
+    setCaptchaId(id);
+    setCaptchaText(text);
+    setCaptchaError('');
+    setValue('captchaId', id);
+    setValue('captchaText', text);
+  };
+
   const onSubmit = async (data: LoginFormData) => {
+    if (!captchaText.trim()) {
+      setCaptchaError('Please enter the captcha text');
+      return;
+    }
+
+    console.log('Login attempt with captcha:', { captchaId, captchaText });
+    
     setIsLoading(true);
+    setCaptchaError('');
     try {
-      await login(data.emailOrUsername, data.password);
+      await login(data.emailOrUsername, data.password, captchaId, captchaText);
+      console.log('Login successful, navigating to dashboard...');
       navigate('/dashboard');
     } catch (error: any) {
+      console.error('Login error:', error);
+      if (error.message.includes('captcha')) {
+        setCaptchaError(error.message);
+      }
       toast.error(error.message);
     } finally {
       setIsLoading(false);
@@ -101,6 +129,11 @@ const LoginPage: React.FC = () => {
                 <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
               )}
             </div>
+
+            <CaptchaComponent
+              onCaptchaChange={handleCaptchaChange}
+              error={captchaError}
+            />
 
             <button
               type="submit"
