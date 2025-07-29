@@ -2,18 +2,17 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL || '/api',
-//   timeout: 10000,
-//   withCredentials: false,
-// });
-
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' 
-    ? 'https://notely-fullstack-application-backend.onrender.com'
-    : '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 10000,
 });
+
+// const api = axios.create({
+//   baseURL: process.env.NODE_ENV === 'production' 
+//     ? 'https://notely-fullstack-application-backend.onrender.com'
+//     : '/api',
+//   timeout: 10000,
+// });
 
 // Request interceptor
 api.interceptors.request.use(
