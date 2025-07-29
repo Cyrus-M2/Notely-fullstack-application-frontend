@@ -110,7 +110,7 @@ const RegisterPage: React.FC = () => {
                   })}
                   type="text"
                   className="input-field"
-                  placeholder="John"
+                  placeholder="Juice"
                 />
                 {errors.firstName && (
                   <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
@@ -131,7 +131,7 @@ const RegisterPage: React.FC = () => {
                   })}
                   type="text"
                   className="input-field"
-                  placeholder="Doe"
+                  placeholder="Juicy"
                 />
                 {errors.lastName && (
                   <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
@@ -157,7 +157,7 @@ const RegisterPage: React.FC = () => {
                 })}
                 type="text"
                 className="input-field"
-                placeholder="johndoe"
+                placeholder="Juicejuicy"
               />
               {errors.username && (
                 <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
@@ -178,7 +178,7 @@ const RegisterPage: React.FC = () => {
                 })}
                 type="email"
                 className="input-field"
-                placeholder="john@example.com"
+                placeholder="juicy@gmail.com"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
