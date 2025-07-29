@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
@@ -8,7 +7,7 @@ import type { User } from '../types';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (emailOrUsername: string, password: string) => Promise<void>;
+  login: (emailOrUsername: string, password: string, captchaId: string, captchaText: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
@@ -21,6 +20,8 @@ interface RegisterData {
   username: string;
   email: string;
   password: string;
+  captchaId: string;
+  captchaText: string;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -59,25 +60,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (emailOrUsername: string, password: string) => {
+  const login = async (emailOrUsername: string, password: string, captchaId: string, captchaText: string) => {
     try {
+      console.log('Login attempt:', { emailOrUsername, captchaId, captchaText });
       const response = await api.post('/auth/login', { 
         emailOrUsername, 
-        password 
+        password,
+        captchaId,
+        captchaText
       });
+      console.log('Login response:', response.data);
       const { token, user } = response.data;
       
       // Store token in cookie
       Cookies.set('token', token, { 
         expires: 7,
         sameSite: 'lax',
-        secure: false // Set to true in production with HTTPS
+        secure: window.location.protocol === 'https:'
       });
       
       // Set token in axios defaults
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       setUser(user);
+      console.log('User set in context:', user);
       toast.success('Login successful!');
     } catch (error: any) {
       console.error('Login error:', error);

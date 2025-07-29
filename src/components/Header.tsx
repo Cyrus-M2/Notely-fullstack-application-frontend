@@ -40,7 +40,8 @@ const Header: React.FC = () => {
     { path: '/new-entry', icon: Plus, label: 'New' },
     { path: '/analytics', icon: BarChart3, label: 'Analytics' },
     { path: '/ai-assistant', icon: Sparkles, label: 'AI' },
-    { path: '/my-shared-notes', icon: Share2, label: 'Shared Notes' },
+    { path: '/shared-with-me', icon: Share2, label: 'Shared Notes' },
+    // { path: '/my-shared-notes', icon: Share2, label: 'Shared Notes' },
     { path: '/profile', icon: User, label: 'Profile' },
     { path: '/trash', icon: Trash2, label: 'Trash' },
   ];

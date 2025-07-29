@@ -16,7 +16,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import AIAssistantPage from './pages/AIAssistantPage';
 import SharedNotesPage from './pages/SharedNotesPage';
-import MySharedNotesPage from './pages/SharedNotesPage';
+// import MySharedNotesPage from './pages/MySharedNotesPage';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Protected Route Component
@@ -30,8 +30,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return user ? <>{children}</> : <Navigate to="/login" replace />;
 };
 
+// Public Route Component (redirect if already authenticated)
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
+  
+  console.log('PublicRoute - user:', user, 'loading:', loading);
   
   if (loading) {
     return <LoadingSpinner />;
@@ -153,7 +156,7 @@ function AppContent() {
           </ProtectedRoute>
         }
       />
-      <Route
+      {/* <Route
         path="/my-shared-notes"
         element={
           <ProtectedRoute>
@@ -162,8 +165,9 @@ function AppContent() {
             </Layout>
           </ProtectedRoute>
         }
-      />
+      /> */}
 
+      {/* 404 Route */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
