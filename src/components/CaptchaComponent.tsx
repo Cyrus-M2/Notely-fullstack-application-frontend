@@ -45,7 +45,7 @@ const CaptchaComponent: React.FC<CaptchaComponentProps> = ({ onCaptchaChange, er
   return (
     <div className="space-y-3">
       <label className="block text-sm font-medium text-gray-700">
-        Confirm you are robot *
+        Confirm you are not robot *
       </label>
       
       <div className="flex items-center space-x-3">
