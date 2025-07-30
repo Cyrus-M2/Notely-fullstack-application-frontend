@@ -15,8 +15,10 @@ const CaptchaComponent: React.FC<CaptchaComponentProps> = ({ onCaptchaChange, er
 
   const generateCaptcha = async () => {
     setLoading(true);
-    setCaptchaText(''); // Clear previous text
+    setCaptchaText('');
     try {
+      console.log('Generating captcha from:', `${import.meta.env.VITE_API_URL || 'https://notely-fullstack-application-backend.onrender.com/api'}/captcha/generate`);
+      
       const response = await api.get('/captcha/generate');
       console.log('Generated captcha:', response.data.id);
       setCaptchaId(response.data.id);
@@ -43,7 +45,7 @@ const CaptchaComponent: React.FC<CaptchaComponentProps> = ({ onCaptchaChange, er
   return (
     <div className="space-y-3">
       <label className="block text-sm font-medium text-gray-700">
-        Security Verification *
+        Confirm you are robot *
       </label>
       
       <div className="flex items-center space-x-3">
