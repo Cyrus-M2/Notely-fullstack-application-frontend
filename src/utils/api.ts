@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://notely-fullstack-application-backend.onrender.com/api',
   timeout: 10000,
   withCredentials: false,
 });
@@ -54,7 +54,7 @@ api.interceptors.response.use(
       }
       
       // Show error toast for other errors
-      if (error.response.status !== 422) { // Don't show toast for validation errors
+      if (error.response.status !== 422) {
         toast.error(message);
       }
     } else if (error.request) {
