@@ -37,21 +37,21 @@ const NewEntryPage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 sm:mb-8 space-y-4 lg:space-y-0">
+        <div className="flex items-center space-x-4 flex-1 min-w-0">
           <button
             onClick={() => navigate("/dashboard")}
             className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Create New Note</h1>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Create New Note</h1>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 lg:flex-shrink-0">
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
-            className="btn-secondary flex items-center space-x-2"
+            className="btn-secondary flex items-center space-x-2 text-sm"
           >
             <Eye size={18} />
             <span>{showPreview ? "Edit" : "Preview"}</span>
@@ -64,7 +64,7 @@ const NewEntryPage: React.FC = () => {
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
           >
             Title *
           </label>
@@ -77,11 +77,11 @@ const NewEntryPage: React.FC = () => {
               },
             })}
             type="text"
-            className="input-field text-lg font-medium"
+            className="input-field text-base sm:text-lg font-medium"
             placeholder="Enter your note title..."
           />
           {errors.title && (
-            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+            <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.title.message}</p>
           )}
         </div>
 
@@ -89,7 +89,7 @@ const NewEntryPage: React.FC = () => {
         <div>
           <label
             htmlFor="synopsis"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
           >
             Synopsis *
           </label>
@@ -101,12 +101,12 @@ const NewEntryPage: React.FC = () => {
                 message: "Synopsis must be at least 10 characters",
               },
             })}
-            rows={3}
-            className="input-field resize-none"
+            rows={2}
+            className="input-field resize-none text-sm sm:text-base"
             placeholder="Brief summary of your note..."
           />
           {errors.synopsis && (
-            <p className="mt-1 text-sm text-red-600">
+            <p className="mt-1 text-xs sm:text-sm text-red-600">
               {errors.synopsis.message}
             </p>
           )}
@@ -116,7 +116,7 @@ const NewEntryPage: React.FC = () => {
         <div>
           <label
             htmlFor="content"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
           >
             Content *{" "}
             {!showPreview && (
@@ -125,8 +125,8 @@ const NewEntryPage: React.FC = () => {
           </label>
 
           {showPreview ? (
-            <div className="min-h-[400px] p-4 border border-gray-300 rounded-lg bg-gray-50">
-              <div className="prose max-w-none">
+            <div className="min-h-[300px] sm:min-h-[400px] p-3 sm:p-4 border border-gray-300 rounded-lg bg-gray-50 overflow-auto">
+              <div className="prose prose-sm sm:prose-base max-w-none">
                 <ReactMarkdown>
                   {watchedContent || "Nothing to preview yet..."}
                 </ReactMarkdown>
@@ -141,52 +141,52 @@ const NewEntryPage: React.FC = () => {
                   message: "Content must be at least 20 characters",
                 },
               })}
-              rows={15}
-              className="input-field resize-none font-mono text-sm"
+              rows={12}
+              className="input-field resize-none font-mono text-xs sm:text-sm"
               placeholder="Write your note content here... You can use Markdown formatting:
 
-              # Heading 1
-              ## Heading 2
-              ### Heading 3
+ # Heading 1
+## Heading 2
+### Heading 3
 
-              **Bold text**
-              *Italic text*
+**Bold text**
+*Italic text*
 
-              - Bullet point
-              - Another point
+- Bullet point
+- Another point
 
-              1. Numbered list
-              2. Another item
+1. Numbered list
+2. Another item
 
-              > Blockquote
+> Blockquote
 
-              `code snippet`
+`code snippet`
 
-              ```
-              code block
-              ```"
+```
+code block
+```"
             />
           )}
           {errors.content && (
-            <p className="mt-1 text-sm text-red-600">
+            <p className="mt-1 text-xs sm:text-sm text-red-600">
               {errors.content.message}
             </p>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 sm:pt-6 border-t border-gray-200 space-y-3 sm:space-y-0">
           <button
             type="button"
             onClick={() => navigate("/dashboard")}
-            className="btn-secondary"
+            className="btn-secondary text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
           >
             {isLoading ? (
               <>
@@ -195,7 +195,7 @@ const NewEntryPage: React.FC = () => {
               </>
             ) : (
               <>
-                <Save size={18} />
+                <Save size={16} />
                 <span>Create Note</span>
               </>
             )}
